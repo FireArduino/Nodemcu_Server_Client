@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+        "array": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "regex": "cpp",
+        "char_traits": "cpp",
+        "algorithm": "cpp",
+        "valarray": "cpp",
+        "bitset": "cpp",
+        "chrono": "cpp",
+        "associative_base": "cpp",
+        "complex": "cpp",
+        "list": "cpp",
+        "ranges": "cpp"
+    },
+    "workbench.colorTheme": "JellyFish",
+}
