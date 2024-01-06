@@ -22,7 +22,7 @@ class Wifi_AP
 
 
     public:
-        void make_softAP(int wait_time);
+        bool make_softAP(int wait_time);
 };
 
 

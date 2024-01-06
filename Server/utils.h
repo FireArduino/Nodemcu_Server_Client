@@ -7,7 +7,7 @@ class UTILS
 {
 private:
 public:
-    void Logger(String function_name, int lineNo, bool new_line, bool new_tab);
+    void Logger(String function_name, int lineNo, String msg, bool new_line=false, bool new_tab=false);
 };
 
 #endif
