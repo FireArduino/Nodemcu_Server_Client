@@ -8,8 +8,11 @@ String strp[10];
 
 void Serversetup()
 {
-    if (wap.make_softAP(15))
+    wap.setSSID("ESPWIFI");
+    wap.setPassKey("12345678");
+    if (wap.make_softAP(15) )
     {
+        while(!wap.isSoftAP());
         ws_server.begin();
     }
 }

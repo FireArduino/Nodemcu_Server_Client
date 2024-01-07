@@ -13,16 +13,20 @@
 class Wifi_AP
 {
     private:
-        const char *ssid = "FireESP8266";
-        const char *password = "abc12345";
-        String wIP = WiFi.softAPIP().toString();
-        String wMac = WiFi.softAPmacAddress();
-        int cNum = WiFi.softAPgetStationNum();
+        String ssid = "FireESP8266";
+        String password = "abc12345";
         bool isConnected;
 
 
     public:
         bool make_softAP(int wait_time);
+        void setSSID(String ss);
+        void setPassKey(String pass);
+        bool isSoftAP();
+        String getMac();
+        String getIP();
+        String getGateWay();
+        int getConnectinCount();
 };
 
 

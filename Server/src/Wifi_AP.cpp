@@ -4,7 +4,6 @@
 IPAddress local_IP(192, 168, 4, 1);
 IPAddress gateway(192, 168, 4, 9);
 IPAddress subnet(255, 255, 255, 0);
-String wGate = gateway.toString();
 
 UTILS utils;
 
@@ -55,12 +54,6 @@ bool Wifi_AP::make_softAP(int wait_time)
         #ifdef DEBUG_SAP1
             utils.Logger(__FUNCTION__,__LINE__,"Ready",true);
         #endif
-        wIP = WiFi.softAPIP().toString();
-        wMac = WiFi.softAPmacAddress();
-        #ifdef DEBUG_SAP1
-            utils.Logger(__FUNCTION__,__LINE__,String("SoftAPIP : "+ wIP),true);
-            utils.Logger(__FUNCTION__,__LINE__,String("SoftAPMAC : "+ wMac),true);
-        #endif
     }
     else
     {
@@ -71,5 +64,61 @@ bool Wifi_AP::make_softAP(int wait_time)
     return ((isCon) && (isConnected));
 }
 
+void Wifi_AP::setSSID(String ss){
+    if(ssid.length() > 0)
+    {
+        ssid = ss;
+    }
+}
 
+void Wifi_AP::setPassKey(String pass){
+    if(pass.length() > 0)
+    {
+        password = pass;
+    }
+}
 
+bool Wifi_AP::isSoftAP()
+{
+    return WiFi.enableAP(true);
+}
+
+String Wifi_AP::getMac()
+{
+    String MAC = "";
+    if(isSoftAP() && isConnected)
+    {
+        MAC = WiFi.softAPmacAddress();
+    }
+    return MAC;
+}
+
+String Wifi_AP::getIP()
+{
+    String IP = "";
+    if(isSoftAP() && isConnected)
+    {
+        IP = WiFi.softAPIP().toString();
+    }
+    return IP;
+}
+
+String Wifi_AP::getGateWay()
+{
+    String GateIP = "";
+    if(isSoftAP() && isConnected)
+    {
+        GateIP = gateway.toString();
+    }
+    return GateIP;
+}
+
+int Wifi_AP::getConnectinCount()
+{
+    int cCount = 0;
+    if(isSoftAP() && isConnected)
+    {
+        cCount = WiFi.softAPgetStationNum();
+    }
+    return cCount;
+}
