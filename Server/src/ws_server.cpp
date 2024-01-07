@@ -2,7 +2,8 @@
 
 String WS_SERVER::msg;
 bool WS_SERVER::msg_recived =false;
-bool inside = true;
+bool inside_loop = true;
+bool inside_getRecivedmsg = true;
 // IPAddress WS_SERVER::remoteIP(uint8_t num);
 
 void WS_SERVER::begin()
@@ -53,19 +54,29 @@ void WS_SERVER::customwebSocketEvent(uint8_t num, WStype_t type, uint8_t *payloa
 String WS_SERVER::getRecivedmsg(void)
 {
     #ifdef DEBUG_WS1
-        UTILS::Logger(__FUNCTION__,__LINE__,"Inside getRecivedmsg",true);
+        if(inside_getRecivedmsg)
+        {
+            UTILS::Logger(__FUNCTION__,__LINE__,"Inside getRecivedmsg",true);
+        }
     #endif
     String tmp_msg = "";
     if(msg.length() > 0 && msg_recived)
     {
         #ifdef DEBUG_WS2
+        if(inside_getRecivedmsg)
+        {
             UTILS::Logger(__FUNCTION__,__LINE__,"old messegse : " + tmp_msg + " New messegse " + msg + " msg_recived_flag is " + String(msg_recived),true);
+        }
         #endif
         tmp_msg =  msg;
         msg = "";
         msg_recived = false;
         #ifdef DEBUG_WS2
+        if(inside_getRecivedmsg)
+        {
             UTILS::Logger(__FUNCTION__,__LINE__,"msg_recived_flag is " + String(msg_recived),true);
+            inside_getRecivedmsg = false;
+        }
         #endif
     }
     return tmp_msg;
@@ -76,10 +87,10 @@ String WS_SERVER::getRecivedmsg(void)
 void WS_SERVER::loop()
 {
     #ifdef DEBUG_WS1
-        if(inside)
+        if(inside_loop)
         {
             UTILS::Logger(__FUNCTION__,__LINE__,"Inside WS_loop",true);
-            inside = false;
+            inside_loop = false;
         }
     #endif
     WebSocketsServer::loop();
