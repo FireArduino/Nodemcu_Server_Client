@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 #include <WebSocketsServer.h>
-
-class WS_SERVER : public WebSocketsServer
+#include "../global_defines.h"
+class WS_SERVER : public WebSocketsServer, virtual UTILS
 {
     private:
         static void customwebSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length);

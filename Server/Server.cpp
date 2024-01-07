@@ -2,15 +2,15 @@
 
 Wifi_AP wap;
 WS_SERVER ws_server = WS_SERVER(8889);
-UTILS util;
 String tmp_str;
 String strp[10];
+UTILS util;
 
 void Serversetup()
 {
     wap.setSSID("ESPWIFI");
     wap.setPassKey("12345678");
-    if (wap.make_softAP(15) )
+    if (wap.make_softAP(15))
     {
         while(!wap.isSoftAP());
         ws_server.begin();

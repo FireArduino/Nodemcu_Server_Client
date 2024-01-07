@@ -2,78 +2,49 @@
 
 String WS_SERVER::msg;
 bool WS_SERVER::msg_recived =false;
+bool inside = true;
 // IPAddress WS_SERVER::remoteIP(uint8_t num);
 
 void WS_SERVER::begin()
 {
-    // WebSocketsServer::WebSocketsServer(wsport);
+    #ifdef DEBUG_WS1
+        UTILS::Logger(__FUNCTION__,__LINE__,"Inside WS_begin",true);
+    #endif
     WebSocketsServer::begin();
+    #ifdef DEBUG_WS2
+        UTILS::Logger(__FUNCTION__,__LINE__,"WS_begin Successfully",true);
+    #endif
     WebSocketsServer::onEvent(WS_SERVER::customwebSocketEvent);
+    #ifdef DEBUG_WS2
+        UTILS::Logger(__FUNCTION__,__LINE__,"WS Callback Setup Successfully",true);
+    #endif
 }
 
 void WS_SERVER::customwebSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
 {
-    // unsigned int clientID = num;     
     String strdata;
     String Clint_ip;    
     IPAddress clientIP;                                                              // Connected client ID
-    // Wsip = webSocket.remoteIP(clientID).toString();                                                          // Connected client IPAddress
-    // String Welcome_Str = "Hey! " + Wsip + ":[" + String(clientID) + "]" + " Welcome to FireWebSocketServer"; // Welcome Messege For Client.
     switch (type)
     {
         case WStype_DISCONNECTED: // on disconnect
-            // Wsip = webSocket.remoteIP(clientID).toString();
-            // Serial.print("\\nClient[");
-            // Serial.print(num);
-            // Serial.print("] Disconnected!");
             msg = String(num)+":Disconnected!";
             msg_recived = true;
             break;
         case WStype_CONNECTED: // on connect
-            // Wsip = webSocket.remoteIP(clientID).toString();
-            // Serial.print("\\nConnected from ");
-            // Serial.print(Wsip + ":");
-            // Serial.print(num);
             msg = String(num)+":Connected!";
             msg_recived = true;
-            // Serial.printf(" url: %s", payload);
-            // webSocket.sendTXT(clientID, Welcome_Str);
-
             break;
         case WStype_TEXT: // on Text Frame
-            /* ---------------------------------------- I`m Remove this as Aniket told me --------------------------------------- */
-            // Clint_ip = WebSocketsServer::remoteIP(num).toString();
-            // clientIP = remoteIP(num);
-            // Clint_ip = clientIP.toString();
-            // clientIP = this->remoteIP(num);
-            // Serial.print("\\n");
-            // Serial.print(clientID);
-            // Serial.print(":" + Wsip);
-            // Serial.printf(" : %s", payload);
-            /* ---------------------------------------- I`m Remove this as Aniket told me --------------------------------------- */
-            // _payloadStr = String(reinterpret_cast<char*>(payload), length);
-            // int length = int(length);
-            // char payloadCharArray[(length + 1)];  // +1 for null terminator
-            // strncpy(payloadCharArray, reinterpret_cast<char*>(payload), length);
-            // payloadCharArray[length] = '\0';  // Null terminate the string
-            // Serial.printf("Messege is : \n%s", payload);
             strdata = "";
             for(size_t i=0; i<length;i++)
             {
                 strdata += char(payload[i]);
-                // Serial.println(String(__LINE__)+" : "+String(__FUNCTION__)+" strdata : "+strdata);
             }
-            // strdata = String((char*)payload);
-            // Serial.println(strdata);
             msg = String(num) + String(":") +  strdata;
             msg_recived = true;
-            // Serial.println(String(__LINE__)+" : "+String(__FUNCTION__)+" msg : "+msg);
             break;
         case WStype_BIN: // on BIN Frame
-            // Serial.print("\\n");
-            // Serial.print(num);
-            // Serial.printf(" get binary length: %u\\n", length);
-            // hexdump(payload, length);
             break;
     }
 }
@@ -81,13 +52,21 @@ void WS_SERVER::customwebSocketEvent(uint8_t num, WStype_t type, uint8_t *payloa
 
 String WS_SERVER::getRecivedmsg(void)
 {
-    // Serial.println(String(__LINE__)+" : "+String(__FUNCTION__)+" msg : "+msg);
+    #ifdef DEBUG_WS1
+        UTILS::Logger(__FUNCTION__,__LINE__,"Inside getRecivedmsg",true);
+    #endif
     String tmp_msg = "";
     if(msg.length() > 0 && msg_recived)
     {
+        #ifdef DEBUG_WS2
+            UTILS::Logger(__FUNCTION__,__LINE__,"old messegse : " + tmp_msg + " New messegse " + msg + " msg_recived_flag is " + String(msg_recived),true);
+        #endif
         tmp_msg =  msg;
         msg = "";
         msg_recived = false;
+        #ifdef DEBUG_WS2
+            UTILS::Logger(__FUNCTION__,__LINE__,"msg_recived_flag is " + String(msg_recived),true);
+        #endif
     }
     return tmp_msg;
 }
@@ -96,16 +75,20 @@ String WS_SERVER::getRecivedmsg(void)
 
 void WS_SERVER::loop()
 {
+    #ifdef DEBUG_WS1
+        if(inside)
+        {
+            UTILS::Logger(__FUNCTION__,__LINE__,"Inside WS_loop",true);
+            inside = false;
+        }
+    #endif
     WebSocketsServer::loop();
 }
 
 int WS_SERVER::clients(bool ping)
 {
+    #ifdef DEBUG_WS2
+        UTILS::Logger(__FUNCTION__,__LINE__,"Inside clients\nTotal Clients : " + String(WebSocketsServer::connectedClients(ping)),true);
+    #endif
     return WebSocketsServer::connectedClients(ping);
 }
-
-// IPAddress WS_SERVER::remoteIP(uint8_t num)
-// {
-//     // WebSocketsServer serverInstance;
-//     return WebSocketsServer::getremoteIP(num);
-// }
