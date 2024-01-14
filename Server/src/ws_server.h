@@ -18,6 +18,7 @@ class WS_SERVER : public WebSocketsServer, virtual UTILS
         void loop();
         String getRecivedmsg(void);
         int clients(bool ping = false);
+        bool sendMsg(int id, String msg);
 };
 
 #endif

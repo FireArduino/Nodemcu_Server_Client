@@ -29,11 +29,11 @@ void WS_SERVER::customwebSocketEvent(uint8_t num, WStype_t type, uint8_t *payloa
     switch (type)
     {
         case WStype_DISCONNECTED: // on disconnect
-            msg = String(num)+":Disconnected!";
+            msg = String(num)+"@Disconnected!";
             msg_recived = true;
             break;
         case WStype_CONNECTED: // on connect
-            msg = String(num)+":Connected!";
+            msg = String(num)+"@Connected!";
             msg_recived = true;
             break;
         case WStype_TEXT: // on Text Frame
@@ -42,7 +42,7 @@ void WS_SERVER::customwebSocketEvent(uint8_t num, WStype_t type, uint8_t *payloa
             {
                 strdata += char(payload[i]);
             }
-            msg = String(num) + String(":") +  strdata;
+            msg = String(num) + String("@") +  strdata;
             msg_recived = true;
             break;
         case WStype_BIN: // on BIN Frame
@@ -57,13 +57,15 @@ String WS_SERVER::getRecivedmsg(void)
         if(inside_getRecivedmsg)
         {
             UTILS::Logger(__FUNCTION__,__LINE__,"Inside getRecivedmsg",true);
+            inside_getRecivedmsg = false;
         }
     #endif
     String tmp_msg = "";
+    bool inside_if = true;
     if(msg.length() > 0 && msg_recived)
     {
         #ifdef DEBUG_WS2
-        if(inside_getRecivedmsg)
+        if(inside_if)
         {
             UTILS::Logger(__FUNCTION__,__LINE__,"old messegse : " + tmp_msg + " New messegse " + msg + " msg_recived_flag is " + String(msg_recived),true);
         }
@@ -72,10 +74,10 @@ String WS_SERVER::getRecivedmsg(void)
         msg = "";
         msg_recived = false;
         #ifdef DEBUG_WS2
-        if(inside_getRecivedmsg)
+        if(inside_if)
         {
             UTILS::Logger(__FUNCTION__,__LINE__,"msg_recived_flag is " + String(msg_recived),true);
-            inside_getRecivedmsg = false;
+            inside_if = false;
         }
         #endif
     }
@@ -102,4 +104,9 @@ int WS_SERVER::clients(bool ping)
         UTILS::Logger(__FUNCTION__,__LINE__,"Inside clients\nTotal Clients : " + String(WebSocketsServer::connectedClients(ping)),true);
     #endif
     return WebSocketsServer::connectedClients(ping);
+}
+
+bool WS_SERVER::sendMsg(int id,String msg)
+{
+    return WebSocketsServer::sendTXT(id, msg);
 }
