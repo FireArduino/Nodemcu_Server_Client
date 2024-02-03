@@ -13,9 +13,7 @@ void Serversetup()
     if (wap.make_softAP(15))
     {
         while (!wap.isSoftAP());
-        // WS_SERVER ws_server = WS_SERVER(8889);
-        
-        ws_server = new WS_SERVER(8889,wap.getGateWay());
+        ws_server = new WS_SERVER(8889);
         ws_server->begin();
     }
 }

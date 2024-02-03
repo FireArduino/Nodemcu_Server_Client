@@ -10,7 +10,7 @@ class WS_SERVER : public WebSocketsServer, virtual UTILS
         static void customwebSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length);
         // IPAddress remoteIP(uint8_t num);
     public:
-        WS_SERVER(const int port,const String & origin) : WebSocketsServer(port,origin){};
+        WS_SERVER(const int port) : WebSocketsServer(port){};
         static String msg;
         static bool msg_recived;
         // IPAddress remoteIP(uint8_t num);
