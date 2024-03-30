@@ -17,3 +17,8 @@ void enableLogs(boolean debug)
 {
     wm.setDebugOutput(debug);
 }
+
+void setPortelTimeout(int t)
+{
+    wm.setConfigPortalTimeout(t);
+}

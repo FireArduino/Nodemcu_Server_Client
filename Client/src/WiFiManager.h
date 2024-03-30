@@ -6,5 +6,6 @@
 bool inti_wifi_manager(char const *ssid, char const *pass = NULL);
 bool setWifi_Hostname(String hostname);
 void enableLogs(boolean debug = true);
+void setPortelTimeout(int t);
 
 #endif

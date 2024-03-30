@@ -9,6 +9,7 @@ private:
     String _MSG = "";
     bool _connection = false;
     bool _messageReceived = false;
+    String tmp_msg = "";
 
 public:
     bool initClient(const String host, const int port);

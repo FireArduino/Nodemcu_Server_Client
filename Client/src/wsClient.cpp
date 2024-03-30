@@ -11,8 +11,7 @@ bool WSCLIENT::initClient(const String host, const int port)
 
 String WSCLIENT::getMsg()
 {
-    String tmp_msg = "";
-    if (_MSG.length() > 0 && _messageReceived)
+    if (_MSG.length() > 0 && _messageReceived && _MSG != tmp_msg)
     {
         tmp_msg = _MSG;
         _MSG = "";
