@@ -1,9 +1,9 @@
 #include "ws_server.h"
 
 String WS_SERVER::msg;
-bool WS_SERVER::msg_recived =false;
-bool inside_loop = true;
-bool inside_getRecivedmsg = true;
+// bool WS_SERVER::msg_recived =false;
+// bool inside_loop = true;
+// bool inside_getRecivedmsg = true;
 // IPAddress WS_SERVER::remoteIP(uint8_t num);
 
 void WS_SERVER::begin()
@@ -24,17 +24,13 @@ void WS_SERVER::begin()
 void WS_SERVER::customwebSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_t length)
 {
     String strdata;
-    String Clint_ip;    
-    IPAddress clientIP;                                                              // Connected client ID
     switch (type)
     {
         case WStype_DISCONNECTED: // on disconnect
             msg = String(num)+"@Disconnected!";
-            msg_recived = true;
             break;
         case WStype_CONNECTED: // on connect
             msg = String(num)+"@Connected!";
-            msg_recived = true;
             break;
         case WStype_TEXT: // on Text Frame
             strdata = "";
@@ -43,7 +39,6 @@ void WS_SERVER::customwebSocketEvent(uint8_t num, WStype_t type, uint8_t *payloa
                 strdata += char(payload[i]);
             }
             msg = String(num) + String("@") +  strdata;
-            msg_recived = true;
             break;
         case WStype_BIN: // on BIN Frame
             break;
@@ -53,35 +48,12 @@ void WS_SERVER::customwebSocketEvent(uint8_t num, WStype_t type, uint8_t *payloa
 
 String WS_SERVER::getRecivedmsg(void)
 {
-    #ifdef DEBUG_WS1
-        if(inside_getRecivedmsg)
-        {
-            UTILS::Logger(__FUNCTION__,__LINE__,"Inside getRecivedmsg",true);
-            inside_getRecivedmsg = false;
-        }
-    #endif
-    String tmp_msg = "";
-    bool inside_if = true;
-    if(msg.length() > 0 && msg_recived)
+    if(tmp_msg != msg)
     {
-        #ifdef DEBUG_WS2
-        if(inside_if)
-        {
-            UTILS::Logger(__FUNCTION__,__LINE__,"old messegse : " + tmp_msg + " New messegse " + msg + " msg_recived_flag is " + String(msg_recived),true);
-        }
-        #endif
-        tmp_msg =  msg;
-        msg = "";
-        msg_recived = false;
-        #ifdef DEBUG_WS2
-        if(inside_if)
-        {
-            UTILS::Logger(__FUNCTION__,__LINE__,"msg_recived_flag is " + String(msg_recived),true);
-            inside_if = false;
-        }
-        #endif
+        tmp_msg = msg;
+        return tmp_msg;
     }
-    return tmp_msg;
+    return "";
 }
 
 // /* ------------------------------------------------- // MARK : setup ------------------------------------------------ */
@@ -109,4 +81,14 @@ int WS_SERVER::clients(bool ping)
 bool WS_SERVER::sendMsg(int id,String msg)
 {
     return WebSocketsServer::sendTXT(id, msg);
+}
+
+bool WS_SERVER::isAliveClient(int id)
+{
+    return clientIsConnected(id);
+}
+
+void WS_SERVER::fuckClient(int id)
+{
+    disconnect(id);
 }
