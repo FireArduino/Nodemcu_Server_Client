@@ -1,7 +1,7 @@
-#include <Arduino.h>
 #include "global_config.h"
 WSCLIENT client;
-NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+// NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+ULTSONIC ult(TRIGGER_PIN,ECHO_PIN);
 String msg;
 unsigned long int delay_time = 0;
 void setup()
@@ -24,6 +24,7 @@ void setup()
         Serial.println("Not Connected!");
         ESP.restart();
     }
+    ult.init();
     Serial.println("GateWay : " + WiFi.gatewayIP().toString());
     Serial.println("IP : " + WiFi.localIP().toString());
 }
@@ -37,7 +38,8 @@ void loop()
     }
     client.clinetLoop();
     msg = client.getMsg();
-    int distance = sonar.ping_cm();
+    // int distance = sonar.ping_cm();
+    int distance = ult.measurementsSender();
     Serial.print("Ping: ");
     Serial.print(distance);
     Serial.println("cm");

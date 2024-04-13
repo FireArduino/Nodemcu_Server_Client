@@ -9,6 +9,8 @@ void Serversetup()
 {
     wap.setSSID("ESPWIFI");
     wap.setPassKey("12345678");
+    pinMode(2, OUTPUT);
+    digitalWrite(2, HIGH);
     if (wap.make_softAP(15))
     {
         while (!wap.isSoftAP())

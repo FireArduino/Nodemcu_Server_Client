@@ -4,7 +4,8 @@
 
 #include "./src/WiFiManager.h"
 #include "./src/wsClient.h"
-#include <NewPing.h>
+#include "./src/ultraSocnicSensor.h"
+// #include <NewPing.h>
 
 String serverStaticIP = "192.168.4.1";
 int serverPort = 8889;

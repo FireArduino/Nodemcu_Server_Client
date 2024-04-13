@@ -46,22 +46,24 @@ void UTILS::Parser(String inStr)
         return;
     }
     String strp[5];
-    Serial.println("inStr : " + inStr);
+    // Serial.println("inStr : " + inStr);
     splitstr(inStr, "@", strp);
-    Serial.println("Client IP : " + strp[4]);
-    Serial.println("Client Add : " + strp[0]);
-    Serial.println("Client : " + strp[1]);
-    Serial.println("IP From Client : " + strp[2]);
+    // Serial.println("Client IP : " + strp[4]);
+    // Serial.println("Client Add : " + strp[0]);
+    // Serial.println("Client : " + strp[1]);
+    // Serial.println("IP From Client : " + strp[2]);
     if (strp[1] == "WaterLevel_Sensor")
     {
         int Distance = strp[3].toInt();
         Serial.println("Water Level : " + String(Distance));
         if (WL_THRASOLD < Distance)
         {
+            digitalWrite(2, LOW);
             Serial.println("Turn Water PUMP ON");
         }
         else if (WL_THRASOLD > Distance)
         {
+            digitalWrite(2, HIGH);
             Serial.println("Turn Water Pump OFF!");
         }
         else

@@ -1,10 +1,14 @@
 #ifndef UTLRASONICSENSOR_H_
 #define UTLRASONICSENSOR_H_
-// #define trigPin 13
-// #define echoPin 12
+#include <Arduino.h>
+class ULTSONIC
+{
+private:
+    int _TRIG, _ECHO;
 
-// long duration;
-// int distance;
-// void init();
-// int measurementsSender();
+public:
+    ULTSONIC(int TRIG, int ECHO);
+    void init();
+    int measurementsSender(bool cm = true);
+};
 #endif
