@@ -22,13 +22,13 @@ ServerMessege Server;
 
 void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len) {
   memcpy(&Server, incomingData, sizeof(myData));
-  Serial.print("Length of data : ");
-  Serial.print("\n" + String(len));
-  Serial.print("MAC : ");
-  Serial.printf("%d", mac);
-  Serial.print("\nMSG: ");
-  Serial.print(Server.MSG);
-  Serial.println();
+  // Serial.print("Length of data : ");
+  // Serial.print("\n" + String(len));
+  // Serial.print("MAC : ");
+  // Serial.printf("%d", mac);
+  // Serial.print("\nMSG: ");
+  // Serial.print(Server.MSG);
+  // Serial.println();
 }
 
 void setup() {
@@ -53,7 +53,7 @@ void setup() {
 
 
 
-void PrintServerMsg() {
+void handleServer() {
   if (String(Server.MSG).length() > 0) {
     Serial.println("Server Messege : " + String(Server.MSG));
     Server = { 0 };
@@ -66,7 +66,8 @@ void loop() {
     Serial.println("Im Sending : " + String(myData.distance));
     esp_now_send(broadcastAddress, (uint8_t *)&myData, sizeof(myData));
     lastTime = millis();
+    delay(100);
+    handleServer();
   }
-  PrintServerMsg();
   delay(300);
 }

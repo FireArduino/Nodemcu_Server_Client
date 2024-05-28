@@ -7,7 +7,7 @@ typedef struct struct_message {
 
 typedef struct SensorInfo {
   char Name[20];
-  uint8_t mac;
+  uint8_t mac[6];
 } SensorInfo;
 
 int old_distance = 0;
@@ -27,13 +27,22 @@ int Sensor_id = 0;
 unsigned long lastTime = 0;
 unsigned long timerDelay = 5000;  // send readings timer
 
+bool haveSensorInfo(char *name) {
+  for (int s = 0; s < MAX_SENSOR; s++) {
+    if (strcmp(Sensor[s].Name, name) == 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
 void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len) {
   memcpy(&myData, incomingData, sizeof(myData));
-  Serial.print("MAC : ");
-  char macAddr[18];
-  sprintf(macAddr, "%2X:%2X:%2X:%2X:%2X:%2X", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-  Serial.println(macAddr);
-  Serial.println();
+  if (Sensor_id < MAX_SENSOR && !(haveSensorInfo(myData.Name))) {
+    memcpy(Sensor[Sensor_id].Name, myData.Name, sizeof(myData.Name));
+    memcpy(Sensor[Sensor_id].mac, mac, sizeof(Sensor[Sensor_id].mac));
+    Sensor_id += 1;
+  }
 }
 
 void setup() {
@@ -56,7 +65,7 @@ void setup() {
 
 bool Data_sendor(String Messege, String Sensor_name) {
   Messege.toCharArray(client.MSG, Messege.length());
-  for (int s = 0; s <= MAX_SENSOR; s++) {
+  for (int s = 0; s < MAX_SENSOR; s++) {
     if (String(Sensor[s].Name) == Sensor_name) {
       esp_now_send((uint8_t *)Sensor[s].mac, (uint8_t *)&Messege, sizeof(Messege));
       return true;
@@ -68,14 +77,19 @@ bool Data_sendor(String Messege, String Sensor_name) {
 
 void handleRelay() {
   if (old_distance != myData.distance) {
+    // Serial.println("Sensor Name : " + String(Sensor[Sensor_id -1].Name));
+    // Serial.print("MAC : ");
+    // char macAddr[18];
+    // sprintf(macAddr, "%2X:%2X:%2X:%2X:%2X:%2X", Sensor[Sensor_id - 1].mac[0], Sensor[Sensor_id - 1].mac[1], Sensor[Sensor_id - 1].mac[2], Sensor[Sensor_id - 1].mac[3], Sensor[Sensor_id - 1].mac[4], Sensor[Sensor_id - 1].mac[5]);
+    // Serial.println(macAddr);
     if (myData.distance > WL_THRASOLD) {
       Serial.println("distance :  " + String(myData.distance));
       Serial.println("Sensor Name :  " + String(myData.Name));
       Serial.println("Water level low turning Pump On");
       digitalWrite(RELAY, HIGH);
-      // if (Data_sendor("OK", "WaterLevel_Sensor")) {
-      //   Serial.println("Replyed To Water level Sensor");
-      // }
+      if (Data_sendor("OK", "WaterLevel_Sensor")) {
+        Serial.println("Replyed To Water level Sensor");
+      }
     } else {
       Serial.println("Water tank level ok !");
       digitalWrite(RELAY, LOW);
