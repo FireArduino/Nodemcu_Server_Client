@@ -1,5 +1,8 @@
 #include "global_config.h"
 
+ULTSONIC ult(TRIGGER_PIN, ECHO_PIN);
+String msg;
+
 void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len) {
   memcpy(&Server, incomingData, sizeof(myData));
   // Serial.print("Length of data : ");
@@ -40,11 +43,12 @@ void handleServer() {
 
 void loop() {
   if ((millis() - lastTime) > timerDelay) {
-    myData.distance = random(1, 99);
-    Serial.println("Im Sending : " + String(myData.distance));
-    esp_now_send(broadcastAddress, (uint8_t *)&myData, sizeof(myData));
-    lastTime = millis();
-    delay(100);
+    myData.distance = ult.measurementsSender();
+    if (myData.distance > 0) {
+      Serial.println("Im Sending : " + String(myData.distance));
+      esp_now_send(broadcastAddress, (uint8_t *)&myData, sizeof(myData));
+      lastTime = millis();
+    }
     handleServer();
   }
   delay(300);

@@ -4,7 +4,7 @@
 #include <ESP8266WiFi.h>
 #include <espnow.h>
 
-#define WL_THRASOLD 50
+#define WL_THRASOLD 20
 #define RELAY D2
 #define MAX_SENSOR 3
 

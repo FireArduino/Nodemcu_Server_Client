@@ -48,15 +48,15 @@ bool Data_sendor(String Messege, String Sensor_name) {
 }
 
 void handleRelay() {
-  if (old_distance != myData.distance) {
+  if (old_distance != myData.distance && myData.distance != 0) {
+      Serial.println("distance :  " + String(myData.distance));
     // Serial.println("Sensor Name : " + String(Sensor[Sensor_id -1].Name));
     // Serial.print("MAC : ");
     // char macAddr[18];
     // sprintf(macAddr, "%2X:%2X:%2X:%2X:%2X:%2X", Sensor[Sensor_id - 1].mac[0], Sensor[Sensor_id - 1].mac[1], Sensor[Sensor_id - 1].mac[2], Sensor[Sensor_id - 1].mac[3], Sensor[Sensor_id - 1].mac[4], Sensor[Sensor_id - 1].mac[5]);
     // Serial.println(macAddr);
     if (myData.distance > WL_THRASOLD) {
-      Serial.println("distance :  " + String(myData.distance));
-      Serial.println("Sensor Name :  " + String(myData.Name));
+      // Serial.println("Sensor Name :  " + String(myData.Name));
       Serial.println("Water level low turning Pump On");
       digitalWrite(RELAY, HIGH);
       if (Data_sendor("OK", "WaterLevel_Sensor")) {
