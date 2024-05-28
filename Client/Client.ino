@@ -1,24 +1,4 @@
-#include <ESP8266WiFi.h>
-#include <espnow.h>
-
-unsigned long lastTime = 0;
-unsigned long timerDelay = 5000;  // send readings timer
-
-String SensorName = "WaterLevel_Sensor";
-
-typedef struct struct_message {
-  int distance;
-  char Name[20];
-} struct_message;
-
-typedef struct ServerMessege {
-  char MSG[24];
-} ServerMessege;
-
-uint8_t broadcastAddress[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-
-struct_message myData;
-ServerMessege Server;
+#include "global_config.h"
 
 void OnDataRecv(uint8_t *mac, uint8_t *incomingData, uint8_t len) {
   memcpy(&Server, incomingData, sizeof(myData));
@@ -50,8 +30,6 @@ void setup() {
   esp_now_register_recv_cb(OnDataRecv);
   SensorName.toCharArray(myData.Name, SensorName.length() + 1);
 }
-
-
 
 void handleServer() {
   if (String(Server.MSG).length() > 0) {

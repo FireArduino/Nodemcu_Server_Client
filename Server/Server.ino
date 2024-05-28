@@ -1,31 +1,4 @@
-#include "global_defines.h"
-
-typedef struct struct_message {
-  int distance;
-  char Name[20];
-} struct_message;
-
-typedef struct SensorInfo {
-  char Name[20];
-  uint8_t mac[6];
-} SensorInfo;
-
-int old_distance = 0;
-
-
-typedef struct ClientMsg {
-  char MSG[20];
-} ClientMsg;
-
-#define MAX_SENSOR 3
-
-struct_message myData;
-SensorInfo Sensor[MAX_SENSOR];
-ClientMsg client;
-int Sensor_id = 0;
-
-unsigned long lastTime = 0;
-unsigned long timerDelay = 5000;  // send readings timer
+#include "global_config.h"
 
 bool haveSensorInfo(char *name) {
   for (int s = 0; s < MAX_SENSOR; s++) {
@@ -73,7 +46,6 @@ bool Data_sendor(String Messege, String Sensor_name) {
   }
   return false;
 }
-
 
 void handleRelay() {
   if (old_distance != myData.distance) {
